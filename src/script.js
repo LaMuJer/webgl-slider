@@ -7,9 +7,9 @@ import testVertexShader from './shaders/test/vertex.glsl'
 import testFragmentShader from './shaders/test/fragment.glsl'
 import {gsap} from 'gsap'
 import img1 from './img/l6.jpg'
-import img2 from './img/l2.jpg'
+import img2 from './img/l3.jpg'
 import img3 from './img/s4.jpg'
-import img4 from './img/s3.jpg'
+import img4 from './img/l2.jpg'
 import img5 from './img/l5.jpg'
 
 let loadingManager = new THREE.LoadingManager()
@@ -169,6 +169,11 @@ document.addEventListener("wheel" , (event) => {
     speed += event.deltaY * 0.0002
     gsap.to('.scroll', {
         opacity: 0,
+    })
+    gsap.to('.main__text', {
+        duration: 1,
+        opacity: 1,
+        x: 50,
     })
 })
 
