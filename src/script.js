@@ -1,3 +1,4 @@
+import './base.css'
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -5,11 +6,11 @@ import * as dat from 'lil-gui'
 import testVertexShader from './shaders/test/vertex.glsl'
 import testFragmentShader from './shaders/test/fragment.glsl'
 import {gsap} from 'gsap'
-import img1 from './img/w6.jpg'
-import img2 from './img/w2.jpg'
-import img3 from './img/w9.jpg'
-import img4 from './img/w4.jpg'
-import img5 from './img/ww1.jpeg'
+import img1 from './img/l6.jpg'
+import img2 from './img/l2.jpg'
+import img3 from './img/s4.jpg'
+import img4 from './img/s3.jpg'
+import img5 from './img/l5.jpg'
 
 let loadingManager = new THREE.LoadingManager()
 let gallery = [
@@ -19,6 +20,10 @@ let gallery = [
     new THREE.TextureLoader(loadingManager).load(img4),
     new THREE.TextureLoader(loadingManager).load(img5),
 ]
+
+// let texts = [
+//
+// ]
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -162,6 +167,9 @@ let speed = 0
 let position = 0
 document.addEventListener("wheel" , (event) => {
     speed += event.deltaY * 0.0002
+    gsap.to('.scroll', {
+        opacity: 0,
+    })
 })
 
 function raf(){
