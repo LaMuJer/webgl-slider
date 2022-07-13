@@ -172,9 +172,9 @@ function raf(){
     let difference = i - position
 
     position += difference * 0.035
-    if (Math.abs(difference) < 0.001){
-        position = i;
-    }
+    // if (Math.abs(difference) < 0.001){
+    //     position = i;
+    // }
 
     gsap.to('.dot' , {
         y: position * 200,
