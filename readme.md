@@ -1,4 +1,4 @@
-# Three.js Journey
+
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
@@ -13,4 +13,7 @@ npm run dev
 
 # Build for production in the dist/ directory
 npm run build
+
+# Live Demo 💛
+https://shader-slider.vercel.app/
 ```
