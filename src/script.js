@@ -1,5 +1,6 @@
 import './base.css'
 import './style.css'
+import './loader.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'lil-gui'
@@ -8,22 +9,47 @@ import testFragmentShader from './shaders/test/fragment.glsl'
 import {gsap} from 'gsap'
 import img1 from './img/l6.jpg'
 import img2 from './img/l3.jpg'
-import img3 from './img/s4.jpg'
+import img3 from './img/s3.jpg'
 import img4 from './img/l2.jpg'
 import img5 from './img/l5.jpg'
+import imagesLoaded from 'imagesloaded/imagesloaded'
 
-let loadingManager = new THREE.LoadingManager()
+let loadingBar = document.querySelector(".loading-bar")
+let loadingManager = new THREE.LoadingManager(
+    () => {
+        gsap.delayedCall(1,() => {
+            gsap.to( overlayMaterial.uniforms.uAlpha, {
+                duration: 3,
+                value : 0,
+            })
+            gsap.to(loadingBar, {
+                duration: 1,
+                delay: .5,
+                opacity: 0,
+                display: 'none',
+            })
+            gsap.to('.html__section' , {
+                opacity: 1,
+            })
+        })
+    },
+    (itemUrl, itemLoaded, itemTotal) => {
+        const progressRatio = itemLoaded / itemTotal
+        loadingBar.style.transform = `scaleX(${progressRatio})`
+        gsap.to(loadingBar, {
+            ease: "power2"
+        })
+        // console.log(progressRatio)
+    },
+)
+let textureLoader = new THREE.TextureLoader(loadingManager)
 let gallery = [
-    new THREE.TextureLoader(loadingManager).load(img1),
-    new THREE.TextureLoader(loadingManager).load(img2),
-    new THREE.TextureLoader(loadingManager).load(img3),
-    new THREE.TextureLoader(loadingManager).load(img4),
-    new THREE.TextureLoader(loadingManager).load(img5),
+    textureLoader.load(img1),
+    textureLoader.load(img2),
+    textureLoader.load(img3),
+    textureLoader.load(img4),
+    textureLoader.load(img5),
 ]
-
-// let texts = [
-//
-// ]
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -31,14 +57,38 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-/**
- * Test mesh
- */
+//  OverLay Screen
+const overlayGeometry = new THREE.PlaneGeometry(1, 1, 1, 1)
+const overlayMaterial = new THREE.ShaderMaterial({
+    // wireframe: true,
+    transparent: true,
+    uniforms: {
+        uAlpha: { value: 1 },
+    },
+    vertexShader: `
+        void main()
+        {           
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform float uAlpha;
+        void main()
+        {
+            gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha); 
+        }
+    `
+})
+const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial)
+overlay.position.set(0,0,.9)
+scene.add(overlay)
+
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 1, 1)
 
 // Material
 const material = new THREE.ShaderMaterial({
+    // wireframe: true,
     vertexShader: testVertexShader,
     fragmentShader: testFragmentShader,
     side: THREE.DoubleSide,
@@ -49,13 +99,14 @@ const material = new THREE.ShaderMaterial({
         uAccel: { value: new THREE.Vector2(.5, 2)},
         uvRate1: { value: new THREE.Vector2(1 , 1 )},
         uPixels: { value: new THREE.Vector2( window.innerWidth, window.innerHeight )},
-        uTexture1: { value: new THREE.TextureLoader().load(img1)},
-        uTexture2: { value: new THREE.TextureLoader().load(img2)},
+        uTexture1: { value: textureLoader.load(img1)},
+        uTexture2: { value: textureLoader.load(img2)},
     }
 })
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
+// mesh.scale.set(.8,.8,.8)
 scene.add(mesh)
 
 /**
@@ -165,6 +216,7 @@ resize()
 // Scroll Movements
 let speed = 0
 let position = 0
+
 document.addEventListener("wheel" , (event) => {
     speed += event.deltaY * 0.0002
     gsap.to('.scroll', {
@@ -184,20 +236,24 @@ function raf(){
     let i = Math.round(position)
     let difference = i - position
 
-    position += difference * 0.035
-    if (Math.abs(difference) < 0.001){
-        position = i;
-    }
+    // difference = difference < 0 ? Math.max(difference,-0.02) : Math.max(difference, +0.02)
 
-    gsap.to('.dot' , {
-        y: position * 200,
-    })
+    position += difference * 0.035
+    // if (Math.abs(difference) < 0.001){
+    //     position = i;
+    // }
+
+    // gsap.to('.dot' , {
+    //     y: position * 200,
+    // })
+
     material.uniforms.uProgress.value = position
 
     let currentSlide = Math.floor(position)
     let nextSlide = (Math.floor(position) + 1) % gallery.length
     material.uniforms.uTexture1.value = gallery[currentSlide]
     material.uniforms.uTexture2.value = gallery[nextSlide]
+
     // console.log(currentSlide, nextSlide)
 
     if (Math.floor(position) > 4 ){
@@ -206,6 +262,8 @@ function raf(){
     if ( Math.floor(position) < 0){
         position = 4
     }
+
+    // console.log(Math.floor(position))
 
     window.requestAnimationFrame(raf)
 }

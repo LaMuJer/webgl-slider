@@ -1,5 +1,8 @@
 @import "./base.css";
 .html__section{
+    background-color: #00000050;
+    backdrop-filter: blur(10);
+    opacity: 0;
     width: 100vw;
     height: 100vh;
     position: relative;
@@ -80,7 +83,7 @@
 .main__text p {
     text-align: right;
     font-size: 15px;
-    transform: translate3d(0 ,30px, 0);
+    transform: translate3d(-100px ,30px, 0);
 }
 .footer{
     position: absolute;
@@ -93,4 +96,62 @@
     align-items: center;
     font-size: 15px;
     color: #ffffff80;
+}
+@media screen and (max-width: 576px){
+    .scroll h1{
+        text-transform: uppercase;
+        font-size: 70px;
+    }
+    .main__text{
+        max-width: 400px;
+    }
+    .main__text h1 {
+        font-size: 40px;
+        line-height: 1.5;
+    }
+    .main__left{
+        display: none;
+    }
+    .main__text p {
+        text-align: right;
+        font-size: 15px;
+        transform: translate3d(-100px ,50px, 0);
+    }
+}
+@media screen and (max-width: 600px){
+    .scroll h1{
+        font-size: 80px;
+    }
+
+}
+
+@media screen and (max-width: 850px){
+    .scroll h1{
+        font-size: 120px;
+    }
+}
+@media screen and (max-width: 972px){
+    .scroll h1{
+        font-size: 170px;
+    }
+    .main__text{
+        width: 800px;
+    }
+}
+@media screen and (max-width: 1200px){
+    .scroll h1{
+        font-size: 170px;
+    }
+    .main__text{
+        width: 800px;
+    }
+    .main__text h1 {
+        font-size: 40px;
+    }
+    .main__left{
+        display: none;
+    }
+    .main__text p {
+        transform: translate3d(-100px ,50px, 0);
+    }
 }

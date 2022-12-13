@@ -1,0 +1,18 @@
+
+.loading-bar{
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    transform: scaleX(0);
+    transform-origin: top left;
+    transition: transform 1.5s ease-in-out;
+    will-change: transform;
+}
+/*.loading-bar.end{*/
+/*    transform: scaleX(0);*/
+/*    transform-origin: top right;*/
+/*    transition: transform 1.5s ease-in-out;*/
+/*}*/

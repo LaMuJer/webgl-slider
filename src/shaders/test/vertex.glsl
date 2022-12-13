@@ -1,13 +1,5 @@
-uniform float uTime;
-uniform sampler2D uTexture1;
-uniform sampler2D uTexture2;
-uniform sampler2D uTexture3;
-uniform vec2 uPixels;
-uniform vec2 uvRate1;
 
 varying vec2 vUv;
-varying vec2 vUv1;
-varying vec2 vPosition;
 
 void main()
 {

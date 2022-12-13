@@ -2,7 +2,6 @@ uniform float uTime;
 uniform float uProgress;
 uniform sampler2D uTexture1;
 uniform sampler2D uTexture2;
-uniform sampler2D uTexture3;
 uniform vec2 uPixels;
 uniform vec2 uvRate1;
 uniform vec2 uAccel;
@@ -23,7 +22,7 @@ float triangle(float p){
 void main()
 {
     vec2 uv = gl_FragCoord.xy / uPixels.xy ;
-    float p = fract(uProgress);
+    float p = fract(uProgress); 
     float delayValue = p * 7. - uv.y * 2. + uv.x - 2.0 ;
     delayValue = clamp(delayValue,0.0,1.0) ;
 
@@ -36,7 +35,6 @@ void main()
 
     vec4 texture1 = texture2D(uTexture1, mirrored(vec2(vUv.x , vUv.y + translateValue * translateValue )+ xy ));
     vec4 texture2 = texture2D(uTexture2, mirrored(vec2(vUv.x , vUv.y + ((translateValue * delayValue ) - 1.)* .08 )+ xy )) ;
-    vec4 texture3 = texture2D(uTexture3, vUv);
 
 //    vec4 texture1 = texture2D(uTexture1, vUv * translateValue1);
 //    vec4 texture2 = texture2D(uTexture2, vUv * translateValue2 );
